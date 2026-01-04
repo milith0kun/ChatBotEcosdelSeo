@@ -1,0 +1,23 @@
+# FastAPI Framework
+fastapi>=0.100.0
+uvicorn[standard]>=0.20.0
+python-multipart>=0.0.6
+
+# HTTP Client
+httpx>=0.24.0
+
+# Database
+motor>=3.0.0
+pymongo>=4.0.0
+redis>=4.0.0
+
+# AI - DeepSeek (Compatible con OpenAI SDK)
+openai>=1.0.0
+
+# Validation & Settings
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+python-dotenv>=1.0.0
+
+# Logging
+loguru>=0.7.0

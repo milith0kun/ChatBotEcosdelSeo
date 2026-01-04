@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conectar WhatsApp - Ecos del SEO</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #25D366;
+            margin-bottom: 1rem;
+        }
+
+        #qr-container {
+            margin: 20px 0;
+            min-height: 264px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #eee;
+            border-radius: 8px;
+        }
+
+        #qr-image {
+            width: 100%;
+            max-width: 264px;
+            display: none;
+        }
+
+        .btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background: #128C7E;
+        }
+
+        #status {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>📲 WhatsApp ChatBot</h1>
+        <p>Escanea el código QR para conectar</p>
+
+        <div id="qr-container">
+            <span id="loading-text">Cargando QR...</span>
+            <img id="qr-image" alt="QR Code">
+        </div>
+
+        <p id="status">Esperando...</p>
+        <button class="btn" onclick="loadQR()">🔄 Recargar QR</button>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api/v1/whatsapp';
+
+        async function loadQR() {
+            const statusEl = document.getElementById('status');
+            const imgEl = document.getElementById('qr-image');
+            const loadingText = document.getElementById('loading-text');
+
+            statusEl.innerText = "Solicitando QR...";
+            statusEl.style.color = "orange";
+            imgEl.style.display = 'none';
+            loadingText.style.display = 'block';
+
+            try {
+                const response = await fetch(`${API_URL}/qr-code`);
+                const data = await response.json();
+
+                if (data.qrcode_base64) {
+                    imgEl.src = data.qrcode_base64;
+                    imgEl.style.display = 'block';
+                    loadingText.style.display = 'none';
+                    statusEl.innerText = "📸 Escanea ahora";
+                    statusEl.style.color = "#25D366";
+                } else if (data.status === 'connected') {
+                    loadingText.innerText = "✅ YA CONECTADO";
+                    statusEl.innerText = "WhatsApp Online";
+                    statusEl.style.color = "green";
+                } else {
+                    statusEl.innerText = "⚠️ " + (data.message || "Error desconocido");
+                    statusEl.style.color = "red";
+                }
+            } catch (err) {
+                console.error(err);
+                statusEl.innerText = "❌ Error de conexión con Backend";
+                statusEl.style.color = "red";
+            }
+        }
+
+        // Cargar al inicio
+        window.addEventListener('load', loadQR);
+
+        // Verificar estado periódicamente
+        setInterval(async () => {
+            try {
+                const res = await fetch(`${API_URL}/status`);
+                const data = await res.json();
+                if (data.connected) {
+                    document.getElementById('status').innerText = "✅ CONECTADO EXITOSAMENT";
+                    document.getElementById('loading-text').innerText = "✅";
+                    document.getElementById('qr-image').style.display = 'none';
+                }
+            } catch (e) { }
+        }, 3000);
+    </script>
+</body>
+
+</html>
