@@ -13,16 +13,24 @@ class Settings(BaseSettings):
     app_name: str = "ChatBot Ecos del SEO"
     app_version: str = "1.0.0"
     debug: bool = False
-    
-    # DeepSeek API
-    deepseek_api_key: str
-    deepseek_base_url: str = "https://api.deepseek.com"
-    deepseek_model: str = "deepseek-chat"
-    
+
+    # AI Configuration (Gemini / OpenAI compatible)
+    google_api_key: str
+    ai_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/"
+    ai_model: str = "gemini-1.5-flash"
+
     # MongoDB Atlas
-    mongodb_url: str
+    mongodb_uri: str
     mongodb_db_name: str = "ecos_chatbot"
-    
+
+    # Admin y Seguridad
+    jwt_secret: str = "ecos-del-seo-chatbot-secret-2026"
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 1440
+    admin_email: str = "admin@ecosdelseo.com"
+    admin_password: str = "admin123456"
+    frontend_url: str = "https://ecodelseo.com"
+
     # Evolution API
     evolution_api_url: str = "http://localhost:8080"
     evolution_api_key: str = "default-key"

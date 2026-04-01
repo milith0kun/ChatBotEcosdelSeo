@@ -20,7 +20,7 @@ async def connect_to_mongo():
     """Conectar a MongoDB Atlas"""
     settings = get_settings()
     try:
-        db.client = AsyncIOMotorClient(settings.mongodb_url)
+        db.client = AsyncIOMotorClient(settings.mongodb_uri)
         db.db = db.client[settings.mongodb_db_name]
         
         # Verificar conexión

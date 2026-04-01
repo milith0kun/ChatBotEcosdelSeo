@@ -15,10 +15,10 @@ class AIService:
     def __init__(self):
         settings = get_settings()
         self.client = AsyncOpenAI(
-            api_key=settings.deepseek_api_key,
-            base_url=settings.deepseek_base_url
+            api_key=settings.google_api_key,
+            base_url=settings.ai_base_url
         )
-        self.model = settings.deepseek_model
+        self.model = settings.ai_model
     
     async def generate_response(
         self,
